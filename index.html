@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Web App</title>
+</head>
+<body>
+  <h1>Demo Web App</h1>
+  <form id="itemForm">
+    <label for="name">Name:</label><br>
+    <input type="text" id="name" name="name"><br>
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description"></textarea><br><br>
+    <button type="submit">Add Item</button>
+  </form>
+
+  <ul id="itemsList"></ul>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Load items when the page is ready
+      $.get('/items', function (items) {
+        items.forEach(function (item) {
+          $('#itemsList').append(`<li>${item.name}: ${item.description}</li>`);
+        });
+      });
+
+      // Handle form submission
+      $('#itemForm').submit(function (event) {
+        event.preventDefault();
+        const formData = $(this).serialize();
+        $.post('/items', formData, function (item) {
+          $('#itemsList').append(`<li>${item.name}: ${item.description}</li>`);
+        });
+        // Clear form fields after submission
+        $(this)[0].reset();
+      });
+    });
+  </script>
+</body>
+</html>
