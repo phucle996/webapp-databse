@@ -4,8 +4,11 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/demo_db', { useNewUrlParser: true, useUnifiedTopology: true });
+// Connect to MongoDB on Azure Cosmos DB
+mongoose.connect(process.env.COSMOSDB_CONNECTION_STRING, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // Define a schema
